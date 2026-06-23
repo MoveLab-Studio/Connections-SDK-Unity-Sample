@@ -1,0 +1,53 @@
+// Unity 2022.3 settings template + MoveLab Nexus repository.
+//
+// This is the Unity analogue of the Connections SDK's own settings.gradle.kts: it declares the
+// private, authenticated Nexus repository that hosts the mls.* artifacts and reads its credentials
+// from the NEXUS_USER / NEXUS_PASSWORD environment variables or the nexusUser / nexusPassword Gradle
+// properties (~/.gradle/gradle.properties) — exactly as the SDK does. No secrets live in this file.
+//
+// EDM4U + Assets/ConnectionsSDK/Editor/ConnectionsSDKDependencies.xml declares *which* artifacts to
+// pull; this file declares *where from* and *with what credentials*. Repositories must live here (not
+// in mainTemplate.gradle) because Unity uses dependencyResolutionManagement with PREFER_SETTINGS.
+//
+// This file is derived from Unity 2022.3.62f3's shipped settingsTemplate.gradle; the **TOKENS** are
+// substituted by Unity at export and must be preserved.
+
+pluginManagement {
+    repositories {
+        **ARTIFACTORYREPOSITORY**
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+
+// NOTE: these must come AFTER pluginManagement — Gradle requires pluginManagement {} to be
+// the first statement in a settings script.
+def mlsNexusUser = System.getenv("NEXUS_USER") ?: providers.gradleProperty("nexusUser").getOrNull()
+def mlsNexusPassword = System.getenv("NEXUS_PASSWORD") ?: providers.gradleProperty("nexusPassword").getOrNull()
+
+include ':launcher', ':unityLibrary'
+**INCLUDES**
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        **ARTIFACTORYREPOSITORY**
+        google()
+        mavenCentral()
+        maven {
+            name "MoveLabNexus"
+            url "https://nexus.mls-cdn.net/repository/movelab/"
+            credentials {
+                username = mlsNexusUser
+                password = mlsNexusPassword
+            }
+        }
+// Android Resolver Repos Start
+        mavenLocal()
+// Android Resolver Repos End
+        flatDir {
+            dirs "${project(':unityLibrary').projectDir}/libs"
+        }
+    }
+}
