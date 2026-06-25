@@ -4,7 +4,7 @@ apply plugin: 'com.android.library'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 // Android Resolver Dependencies Start
-    implementation 'mls.connections:unity:3.4.0-beta01' // Packages/mls.connections.unity/Editor/ConnectionsSDKDependencies.xml:19
+    implementation 'mls.connections:unity:3.4.0-beta03' // Packages/mls.connections.unity/Editor/ConnectionsSDKDependencies.xml:20
 // Android Resolver Dependencies End
 **DEPS**}
 
