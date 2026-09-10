@@ -17,7 +17,7 @@
       }
     },
     "mls.connections.unity": {
-      "version": "3.5.0",
+      "version": "3.7.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {
